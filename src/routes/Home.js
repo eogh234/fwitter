@@ -1,29 +1,26 @@
 import { dbService } from "fBase";
 import React, { useEffect, useState } from "react";
 
-const Home = () => {
+const Home = ({ userObj }) => {
     const [fweet, setFweet] = useState("");
     const [fweets, setFweets] = useState([]);
-    const getFweets = async () => {
-        const dbFweets = await dbService.collection("fweets").get();
-        dbFweets.forEach((document) => {
-            const fweetObject = {
-                ...document.data(),
-                id: document.id,
-            }
-            setFweets((prev) => [fweetObject, ...prev]);
-        });
-    }
 
     useEffect(() => {
-        getFweets();    
+        dbService.collection("fweets").onSnapshot((snapshot) => {
+            const fweetArray = snapshot.docs.map(doc => ({ 
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setFweets(fweetArray);
+        });
     }, []);
 
     const onSubmit = async (event) => {
         event.preventDefault();
         await dbService.collection("fweets").add({
-            fweet: fweet,
+            text: fweet,
             createdAt: Date.now(),
+            creatorId: userObj.uid,
         });
         setFweet("");
     };
@@ -39,16 +36,16 @@ const Home = () => {
                 <input
                     value={fweet}
                     onChange={onChange}
-                    type="text" 
-                    placeholder="What's on your mind" 
-                    maxLength={120} 
+                    type="text"
+                    placeholder="What's on your mind"
+                    maxLength={120}
                 />
                 <input type="submit" value={"fweet"} />
             </form>
             <div>
                 {fweets.map((fweet) => (
                     <div key={fweet.id}>
-                        <h4>{fweet.fweet}</h4>
+                        <h4>{fweet.text}</h4>
                     </div>
                 ))}
             </div>
