@@ -1,8 +1,24 @@
 import { dbService } from "fBase";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Home = () => {
     const [fweet, setFweet] = useState("");
+    const [fweets, setFweets] = useState([]);
+    const getFweets = async () => {
+        const dbFweets = await dbService.collection("fweets").get();
+        dbFweets.forEach((document) => {
+            const fweetObject = {
+                ...document.data(),
+                id: document.id,
+            }
+            setFweets((prev) => [fweetObject, ...prev]);
+        });
+    }
+
+    useEffect(() => {
+        getFweets();    
+    }, []);
+
     const onSubmit = async (event) => {
         event.preventDefault();
         await dbService.collection("fweets").add({
@@ -11,10 +27,12 @@ const Home = () => {
         });
         setFweet("");
     };
+
     const onChange = (event) => {
         const { target: { value } } = event;
         setFweet(value);
     }
+
     return (
         <div>
             <form onSubmit={onSubmit}>
@@ -27,6 +45,13 @@ const Home = () => {
                 />
                 <input type="submit" value={"fweet"} />
             </form>
+            <div>
+                {fweets.map((fweet) => (
+                    <div key={fweet.id}>
+                        <h4>{fweet.fweet}</h4>
+                    </div>
+                ))}
+            </div>
         </div>);
 }
 
