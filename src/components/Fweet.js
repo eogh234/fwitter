@@ -1,3 +1,5 @@
+import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { dbService, storageService } from "fBase";
 import React, { useState } from "react";
 
@@ -28,10 +30,10 @@ const Fweet = ({ fweetObj, isOwner }) => {
     setNewFweet(value);
   };
   return (
-    <div>
+    <div className="fweet">
       {editing ? (
         <>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={onSubmit} className="container fweetEdit">
             <input
               type="text"
               placeholder="Edit your Fweet"
@@ -39,7 +41,7 @@ const Fweet = ({ fweetObj, isOwner }) => {
               required
               onChange={onChange}
             />
-            <input type="submit" value={"Update Fweet"} />
+            <input type="submit" value={"Update Fweet"} className="formBtn" />
           </form>
           <button onClick={toggleEditing}>Cancel</button>
         </>
@@ -50,10 +52,14 @@ const Fweet = ({ fweetObj, isOwner }) => {
             <img src={fweetObj.attachmentUrl} width="50px" height="50px" />
           )}
           {isOwner && (
-            <>
-              <button onClick={onDeleteClick}>Delete Fweet</button>
-              <button onClick={toggleEditing}>Edit Fweet</button>
-            </>
+            <div className="fweet__actions">
+              <span onClick={onDeleteClick}>
+                <FontAwesomeIcon icon={faTrash} />
+              </span>
+              <span onClick={toggleEditing}>
+                <FontAwesomeIcon icon={faPencilAlt} />
+              </span>
+            </div>
           )}
         </>
       )}

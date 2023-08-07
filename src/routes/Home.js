@@ -17,9 +17,9 @@ const Home = ({ userObj }) => {
   }, []);
 
   return (
-    <div>
+    <div className="container">
       <FweetFactory userObj={userObj} />
-      <div>
+      <div style={{ marginTop: 30 }}>
         {fweets.map((fweet) => (
           <Fweet
             key={fweet.id}
