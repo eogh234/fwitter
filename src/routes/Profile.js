@@ -16,7 +16,7 @@ export default ({ refreshUser, userObj }) => {
       .where("creatorId", "==", userObj.uid)
       .orderBy("createdAt")
       .get();
-    console.log(fweets.docs().map((doc) => doc.data));
+    console.log(fweets.docs.map((doc) => doc.data));
   };
 
   useEffect(() => {
