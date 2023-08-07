@@ -60,7 +60,7 @@ const FweetFactory = ({ userObj }) => {
 
   return (
     <form onSubmit={onSubmit} className="factoryForm">
-      <div className="factoryInput__Container">
+      <div className="factoryInput__container">
         <input
           className="factoryInput__input"
           value={fweet}
